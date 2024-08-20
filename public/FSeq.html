@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FSequence</title>
+  <style type="text/css">
+      textarea {
+        width:calc(100% - 8px);
+        height:calc(100% - 28px);
+        text-align:left;
+        white-space:pre;
+        margin:0;
+        border:1px solid black;
+        resize:both;
+        font-family: "Microsoft YaHei", Arial, sans-serif;
+        font-size:13.5px;
+        padding:4px;
+      }
+    </style>
+</head>
+<body>
+  <h1>FSequence</h1>
+  <form name=form style="padding-bottom: 6px;">
+    <label>FFFZ:</label>
+    <textarea id="input_fffz" contentEditable>ψZ[ω^ω](ω^ω+ω)</textarea>
+    <label>FSeq:</label>
+    <textarea id="input_seq" contentEditable></textarea>
+    <label>N:</label>
+    <input id="input_n" type="text" value="3">
+    <!--<label>M:</label>
+    <input id="input_m" type="text" value="1" readonly>-->
+    <input id="expand_button" type="button" value="Expand">
+  </form>
+  <label>FFFZ:</label>
+  <textarea id="output_fffz" readonly></textarea>
+  <label>FSeq:</label>
+  <textarea id="output_seq" readonly></textarea>
+  <div>Version 0.1.4</div>
+  <script src="../dist/main.js"></script>
+</body>
+</html>
