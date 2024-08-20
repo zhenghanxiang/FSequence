@@ -17,6 +17,6 @@ console.log(expand);
 console.log(expandFFFZ);
 
 
-//FFFZ2FSeqTest.test();
+FFFZ2FSeqTest.test();
 
-//FakeTest.test0();
+FakeTest.test0();
