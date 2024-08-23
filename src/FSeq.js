@@ -24,7 +24,7 @@ export default class FSeq {
          *     If a == b, expand to[#](expand(a))
          *     If a != b, expand to [#,b](expand(a))
          */
-        if ((this.isEmpty(a) && this.isEmpty(b)) || this.compareL(a, b) < 0) {
+        if (this.compareL(a, b) < 0) {
             const newA = this.expand(a);
             let result = this.getSupSeq1(subSeqs, subSeqs.length-1, newA);
             for (let i = 0; i < this.N-1; i++) {
@@ -290,27 +290,14 @@ export default class FSeq {
         }
         return one;
     }
-    
+
     static getOumiga() {
-        const m = FSeq.M;
-        const result = new Array(2 * m);
-        for (let i = 0; i < m; i++) {
-            result[i] = 1;
-            result[i + m] = 2;
-        }
-        return result;
-    }
-    
+		return this.getSupSeq0(this.getOne());
+	}
+	
     static getEpsilon0() {
-        const m = FSeq.M;
-        const result = new Array(3 * m);
-        for (let i = 0; i < m; i++) {
-            result[i] = 1;
-            result[i + m] = 2;
-            result[i + m * 2] = 3;
-        }
-        return result;
-    }
+		return this.getSupSeq0(this.getOumiga());
+	}
 
     static getSuccessor(seq) {
 		if (this.isEmpty(seq)) {
@@ -326,18 +313,5 @@ export default class FSeq {
 		} else {
 			return this.getSupSeq1(subSeq, subSeq.length - 1, successor);
 		}
-	}
-
-	static getLiftCount(seq) {
-		let count = seq.length;
-		for (let i = 0; i < seq.length; i++) {
-			if (seq[i] === i + 1) {
-				continue;
-			}
-			if (seq[i] - 1 < count) {
-				count = seq[i] - 1;
-			}
-		}
-		return count;
 	}
 }
