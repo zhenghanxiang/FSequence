@@ -4,7 +4,7 @@ import FakeTest from "./FakeTest.js"
 import FFFZ2FSeqTest from "./FFFZ2FSeqTest.js"
 
 
-var express = "ψZ[ω^ω](ω^ω?ω)";
+var express = "ψZ[ω^ω](ω^ω+ω)";
 var error = FSeqConverter.validateFFFZ(express);
 console.log(error);
 var seq = FSeqConverter.fffz2FSeq(express);

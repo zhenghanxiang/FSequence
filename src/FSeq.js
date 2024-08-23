@@ -67,70 +67,35 @@ export default class FSeq {
         const a2 = subSeqs2[subSeqs2.length - 1];
         const b2 = subSeqs2.length > 1 ? subSeqs2[subSeqs2.length - 2] : null;
 
-        const compareL_a1_b1 = this.compareL(a1, b1);
-        const compareL_a2_b2 = this.compareL(a2, b2);
-        const compareL_b1_b2 = this.compareL(b1, b2);
-
-        if ((compareL_a1_b1 < 0 && compareL_a2_b2 < 0) || compareL_b1_b2 === 0) {
-            return this.compareL2(a1, a2);
-        } 
-        if (compareL_a1_b1 < 0 && compareL_a2_b2 >= 0 && this.isLimit(a1) ) {
-            /*
-             *  按a1为“真”，a2为“伪” 的情况时 走特殊规则； fffz 参数的真伪可以作为一个判定条件，来源@Arcahv 2024-8-16 11:59
-             *  compareL(ψZ(a1),ψZ[b2](a2)) = compareL(ψZ(a1),a2))
-             *  例如 ε0 = ψZ(ω)  ε(ω) = ψZ[ω^2](W^2)  compareL(ε0 ,ε(ω)) = compareL(ε0 ,ω^2) 
-             */
-            let tempSeq2 = seq2;
-            while(true) {
-                const tempSubSeqs2 = this.getSubSeq(tempSeq2);
-                const tempA2 = tempSubSeqs2[tempSubSeqs2.length-1];
-                const tempA2SubSeqs = this.getSubSeq(tempA2);
-		const tempSubA2 = tempA2SubSeqs[tempA2SubSeqs.length-1];
-		const tempSubB2 = tempA2SubSeqs.length>1?tempA2SubSeqs[tempA2SubSeqs.length-2]:null;
-		if(this.compareL(tempSubB2, tempSubA2)>0) {
-                    return this.compareL(seq1, tempA2);
-                }else {
-                    tempSeq2 = tempA2;
-                }
-            }
-        } 
-
-        if (compareL_a1_b1 >= 0 && compareL_a2_b2 < 0 && this.isLimit(a2)) {
-            let tempSeq1 = seq1;
-            while(true) {
-                const tempSubSeqs1 = this.getSubSeq(tempSeq1);
-                const tempA1 = tempSubSeqs1[tempSubSeqs1.length-1];
-                const tempA1SubSeqs = this.getSubSeq(tempA1);
-		const tempSubA1 = tempA1SubSeqs[tempA1SubSeqs.length-1];
-		const tempSubB1 = tempA1SubSeqs.length>1?tempA1SubSeqs[tempA1SubSeqs.length-2]:null;
-		if(this.compareL(tempSubB1, tempSubA1)>0) {
-                    return this.compareL(tempA1, seq2);
-                }else {
-                    tempSeq1 = tempA1;
-                }
-            }
-        }
-
-        if (compareL_a2_b2 >= 0 && (!this.isLimit(b2) || this.compareL(a2, this.getSupSeq0(b2)) >= 0)) { 
-            //这种情况 level(seq2) = level(a2） 决定
-            return this.compareL(seq1, a2);
-        }
-        
-        if (compareL_a1_b1 >= 0 && (!this.isLimit(b1) || this.compareL(a1, this.getSupSeq0(b1)) >= 0)) {
-            //为上面的镜像情况
-            return this.compareL(a1, seq2);
-        } 
-
-        if(compareL_a1_b1<0 && compareL_a2_b2>=0) {
-			//a1是后继,b2非后继
-			return -1;
-		} else if(compareL_a1_b1>=0 && compareL_a2_b2<0) {
-			//b1是非后继,a2后继
-			return 1;
-		} else if(compareL_a1_b1>=0 && compareL_a2_b2>=0) {
-			return this.compareL2(b1,b2);
+        if(!this.isLimit(b1)) {
+			return this.compareL(a1, seq2);
 		}
-        return 0;
+		
+		if(!this.isLimit(b2)) {
+			return this.compareL(seq1, a2);
+		}
+		
+		if(!this.isLimit(a1) || !this.isLimit(a2)) {
+			return this.compareL2(a1, a2);
+		}
+
+        if(this.compareL(b1, b2) == 0) {
+			return this.compareL2(a1, a2);
+		}
+		
+		if((this.compareL(a1, b1)<0 || this.compareL(a2, b2)<0)) {
+			return this.compareL2(this.getRealPart(seq1), this.getRealPart(seq2));
+		}
+
+		if(this.compareL(a2, this.getSupSeq0(b2))>=0) {
+			return this.compareL(seq1, a2);
+		}
+		
+		if(this.compareL(a1, this.getSupSeq0(b1))>=0) {
+			return this.compareL(a1, seq2);
+		}
+		
+		return this.compareL2(b1,b2);
     }
 
     static compareL2(seq1, seq2) {
@@ -239,6 +204,20 @@ export default class FSeq {
         }
         return resultList;
     }
+
+    static getRealPart(seq){
+		if(this.isOne(seq)) {
+			return seq;
+		}
+		const subSeqs = this.getSubSeq(seq);
+		const a = subSeqs[subSeqs.length-1];
+		const b = subSeqs.length>1?subSeqs[subSeqs.length-2]:null;
+		if(this.compareL(b, a) > 0 && this.isLimit(a)) {
+			return a;
+		}else {
+			return this.getRealPart(a);
+		}
+	}
     
     static getSuccessorPartIntValue(seq) {
         let result = 0;
