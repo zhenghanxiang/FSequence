@@ -2,31 +2,32 @@
 // jshint ignore: start
 import antlr4 from 'antlr4';
 import FFFZListener from './FFFZListener.js';
-const serializedATN = [4,1,14,85,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,
+const serializedATN = [4,1,14,88,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,
 2,5,7,5,1,0,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,5,1,22,8,1,10,1,12,1,25,9,1,
 1,1,1,1,3,1,29,8,1,1,1,1,1,1,1,1,1,3,1,35,8,1,1,2,1,2,1,2,5,2,40,8,2,10,
 2,12,2,43,9,2,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,3,3,54,8,3,1,4,1,4,1,4,
-3,4,59,8,4,1,4,1,4,1,4,1,4,3,4,65,8,4,1,4,3,4,68,8,4,1,4,1,4,1,4,1,4,1,4,
-1,4,3,4,76,8,4,1,4,3,4,79,8,4,3,4,81,8,4,1,5,1,5,1,5,0,0,6,0,2,4,6,8,10,
-0,0,93,0,12,1,0,0,0,2,34,1,0,0,0,4,36,1,0,0,0,6,53,1,0,0,0,8,80,1,0,0,0,
-10,82,1,0,0,0,12,13,3,2,1,0,13,14,5,0,0,1,14,1,1,0,0,0,15,35,3,4,2,0,16,
-28,5,1,0,0,17,18,5,10,0,0,18,23,3,2,1,0,19,20,5,4,0,0,20,22,3,2,1,0,21,19,
-1,0,0,0,22,25,1,0,0,0,23,21,1,0,0,0,23,24,1,0,0,0,24,26,1,0,0,0,25,23,1,
-0,0,0,26,27,5,11,0,0,27,29,1,0,0,0,28,17,1,0,0,0,28,29,1,0,0,0,29,30,1,0,
-0,0,30,31,5,8,0,0,31,32,3,2,1,0,32,33,5,9,0,0,33,35,1,0,0,0,34,15,1,0,0,
-0,34,16,1,0,0,0,35,3,1,0,0,0,36,41,3,8,4,0,37,38,5,5,0,0,38,40,3,8,4,0,39,
-37,1,0,0,0,40,43,1,0,0,0,41,39,1,0,0,0,41,42,1,0,0,0,42,5,1,0,0,0,43,41,
-1,0,0,0,44,54,3,10,5,0,45,54,5,3,0,0,46,47,5,3,0,0,47,48,5,7,0,0,48,54,3,
-6,3,0,49,50,5,8,0,0,50,51,3,4,2,0,51,52,5,9,0,0,52,54,1,0,0,0,53,44,1,0,
-0,0,53,45,1,0,0,0,53,46,1,0,0,0,53,49,1,0,0,0,54,7,1,0,0,0,55,81,3,10,5,
-0,56,58,5,3,0,0,57,59,3,10,5,0,58,57,1,0,0,0,58,59,1,0,0,0,59,81,1,0,0,0,
-60,61,5,3,0,0,61,62,5,7,0,0,62,67,3,6,3,0,63,65,5,6,0,0,64,63,1,0,0,0,64,
-65,1,0,0,0,65,66,1,0,0,0,66,68,3,10,5,0,67,64,1,0,0,0,67,68,1,0,0,0,68,81,
-1,0,0,0,69,70,5,8,0,0,70,71,5,3,0,0,71,72,5,7,0,0,72,73,3,6,3,0,73,78,5,
-9,0,0,74,76,5,6,0,0,75,74,1,0,0,0,75,76,1,0,0,0,76,77,1,0,0,0,77,79,3,10,
-5,0,78,75,1,0,0,0,78,79,1,0,0,0,79,81,1,0,0,0,80,55,1,0,0,0,80,56,1,0,0,
-0,80,60,1,0,0,0,80,69,1,0,0,0,81,9,1,0,0,0,82,83,5,12,0,0,83,11,1,0,0,0,
-11,23,28,34,41,53,58,64,67,75,78,80];
+3,4,59,8,4,1,4,3,4,62,8,4,1,4,1,4,1,4,1,4,3,4,68,8,4,1,4,3,4,71,8,4,1,4,
+1,4,1,4,1,4,1,4,1,4,3,4,79,8,4,1,4,3,4,82,8,4,3,4,84,8,4,1,5,1,5,1,5,0,0,
+6,0,2,4,6,8,10,0,0,97,0,12,1,0,0,0,2,34,1,0,0,0,4,36,1,0,0,0,6,53,1,0,0,
+0,8,83,1,0,0,0,10,85,1,0,0,0,12,13,3,2,1,0,13,14,5,0,0,1,14,1,1,0,0,0,15,
+35,3,4,2,0,16,28,5,1,0,0,17,18,5,10,0,0,18,23,3,2,1,0,19,20,5,4,0,0,20,22,
+3,2,1,0,21,19,1,0,0,0,22,25,1,0,0,0,23,21,1,0,0,0,23,24,1,0,0,0,24,26,1,
+0,0,0,25,23,1,0,0,0,26,27,5,11,0,0,27,29,1,0,0,0,28,17,1,0,0,0,28,29,1,0,
+0,0,29,30,1,0,0,0,30,31,5,8,0,0,31,32,3,2,1,0,32,33,5,9,0,0,33,35,1,0,0,
+0,34,15,1,0,0,0,34,16,1,0,0,0,35,3,1,0,0,0,36,41,3,8,4,0,37,38,5,5,0,0,38,
+40,3,8,4,0,39,37,1,0,0,0,40,43,1,0,0,0,41,39,1,0,0,0,41,42,1,0,0,0,42,5,
+1,0,0,0,43,41,1,0,0,0,44,54,3,10,5,0,45,54,5,3,0,0,46,47,5,3,0,0,47,48,5,
+7,0,0,48,54,3,6,3,0,49,50,5,8,0,0,50,51,3,4,2,0,51,52,5,9,0,0,52,54,1,0,
+0,0,53,44,1,0,0,0,53,45,1,0,0,0,53,46,1,0,0,0,53,49,1,0,0,0,54,7,1,0,0,0,
+55,84,3,10,5,0,56,58,5,3,0,0,57,59,5,6,0,0,58,57,1,0,0,0,58,59,1,0,0,0,59,
+61,1,0,0,0,60,62,3,10,5,0,61,60,1,0,0,0,61,62,1,0,0,0,62,84,1,0,0,0,63,64,
+5,3,0,0,64,65,5,7,0,0,65,70,3,6,3,0,66,68,5,6,0,0,67,66,1,0,0,0,67,68,1,
+0,0,0,68,69,1,0,0,0,69,71,3,10,5,0,70,67,1,0,0,0,70,71,1,0,0,0,71,84,1,0,
+0,0,72,73,5,8,0,0,73,74,5,3,0,0,74,75,5,7,0,0,75,76,3,6,3,0,76,81,5,9,0,
+0,77,79,5,6,0,0,78,77,1,0,0,0,78,79,1,0,0,0,79,80,1,0,0,0,80,82,3,10,5,0,
+81,78,1,0,0,0,81,82,1,0,0,0,82,84,1,0,0,0,83,55,1,0,0,0,83,56,1,0,0,0,83,
+63,1,0,0,0,83,72,1,0,0,0,84,9,1,0,0,0,85,86,5,12,0,0,86,11,1,0,0,0,12,23,
+28,34,41,53,58,61,67,70,78,81,83];
 
 
 const atn = new antlr4.atn.ATNDeserializer().deserialize(serializedATN);
@@ -38,9 +39,8 @@ const sharedContextCache = new antlr4.atn.PredictionContextCache();
 export default class FFFZParser extends antlr4.Parser {
 
     static grammarFileName = "FFFZ.g4";
-    static literalNames = [ null, "'\\u03C8Z'", "'\\u03B5'", "'\\u03C9'", 
-                            "','", "'+'", null, "'^'", "'('", "')'", "'['", 
-                            "']'" ];
+    static literalNames = [ null, "'\\u03C8Z'", "'\\u03B5'", null, "','", 
+                            "'+'", null, "'^'", "'('", "')'", "'['", "']'" ];
     static symbolicNames = [ null, "PSIZ", "EPSILON0", "OMEGA", "COMMA", 
                              "PLUS", "MUL", "POWER", "LPAREN", "RPAREN", 
                              "LBRACKET", "RBRACKET", "INTEGER_LITERAL", 
@@ -250,9 +250,9 @@ export default class FFFZParser extends antlr4.Parser {
 	    this.enterRule(localctx, 8, FFFZParser.RULE_item);
 	    var _la = 0;
 	    try {
-	        this.state = 80;
+	        this.state = 83;
 	        this._errHandler.sync(this);
-	        var la_ = this._interp.adaptivePredict(this._input,10,this._ctx);
+	        var la_ = this._interp.adaptivePredict(this._input,11,this._ctx);
 	        switch(la_) {
 	        case 1:
 	            this.enterOuterAlt(localctx, 1);
@@ -267,8 +267,16 @@ export default class FFFZParser extends antlr4.Parser {
 	            this.state = 58;
 	            this._errHandler.sync(this);
 	            _la = this._input.LA(1);
-	            if(_la===12) {
+	            if(_la===6) {
 	                this.state = 57;
+	                this.match(FFFZParser.MUL);
+	            }
+
+	            this.state = 61;
+	            this._errHandler.sync(this);
+	            _la = this._input.LA(1);
+	            if(_la===12) {
+	                this.state = 60;
 	                this.factor();
 	            }
 
@@ -276,25 +284,25 @@ export default class FFFZParser extends antlr4.Parser {
 
 	        case 3:
 	            this.enterOuterAlt(localctx, 3);
-	            this.state = 60;
+	            this.state = 63;
 	            this.match(FFFZParser.OMEGA);
-	            this.state = 61;
+	            this.state = 64;
 	            this.match(FFFZParser.POWER);
-	            this.state = 62;
+	            this.state = 65;
 	            this.exponent();
-	            this.state = 67;
+	            this.state = 70;
 	            this._errHandler.sync(this);
 	            _la = this._input.LA(1);
 	            if(_la===6 || _la===12) {
-	                this.state = 64;
+	                this.state = 67;
 	                this._errHandler.sync(this);
 	                _la = this._input.LA(1);
 	                if(_la===6) {
-	                    this.state = 63;
+	                    this.state = 66;
 	                    this.match(FFFZParser.MUL);
 	                }
 
-	                this.state = 66;
+	                this.state = 69;
 	                this.factor();
 	            }
 
@@ -302,29 +310,29 @@ export default class FFFZParser extends antlr4.Parser {
 
 	        case 4:
 	            this.enterOuterAlt(localctx, 4);
-	            this.state = 69;
-	            this.match(FFFZParser.LPAREN);
-	            this.state = 70;
-	            this.match(FFFZParser.OMEGA);
-	            this.state = 71;
-	            this.match(FFFZParser.POWER);
 	            this.state = 72;
-	            this.exponent();
+	            this.match(FFFZParser.LPAREN);
 	            this.state = 73;
+	            this.match(FFFZParser.OMEGA);
+	            this.state = 74;
+	            this.match(FFFZParser.POWER);
+	            this.state = 75;
+	            this.exponent();
+	            this.state = 76;
 	            this.match(FFFZParser.RPAREN);
-	            this.state = 78;
+	            this.state = 81;
 	            this._errHandler.sync(this);
 	            _la = this._input.LA(1);
 	            if(_la===6 || _la===12) {
-	                this.state = 75;
+	                this.state = 78;
 	                this._errHandler.sync(this);
 	                _la = this._input.LA(1);
 	                if(_la===6) {
-	                    this.state = 74;
+	                    this.state = 77;
 	                    this.match(FFFZParser.MUL);
 	                }
 
-	                this.state = 77;
+	                this.state = 80;
 	                this.factor();
 	            }
 
@@ -352,7 +360,7 @@ export default class FFFZParser extends antlr4.Parser {
 	    this.enterRule(localctx, 10, FFFZParser.RULE_factor);
 	    try {
 	        this.enterOuterAlt(localctx, 1);
-	        this.state = 82;
+	        this.state = 85;
 	        this.match(FFFZParser.INTEGER_LITERAL);
 	    } catch (re) {
 	    	if(re instanceof antlr4.error.RecognitionException) {
@@ -646,16 +654,16 @@ class ItemContext extends antlr4.ParserRuleContext {
 	    return this.getToken(FFFZParser.OMEGA, 0);
 	};
 
+	MUL() {
+	    return this.getToken(FFFZParser.MUL, 0);
+	};
+
 	POWER() {
 	    return this.getToken(FFFZParser.POWER, 0);
 	};
 
 	exponent() {
 	    return this.getTypedRuleContext(ExponentContext,0);
-	};
-
-	MUL() {
-	    return this.getToken(FFFZParser.MUL, 0);
 	};
 
 	LPAREN() {

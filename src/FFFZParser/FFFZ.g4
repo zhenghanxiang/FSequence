@@ -2,9 +2,13 @@ grammar FFFZ;
 
 // Top Level Description
 
+root
+    : fffz EOF
+    ;
+
 fffz
     : polynomial
-    | PSIZ (LBRACKET fffz (COMMA fffz)* RBRACKET)? LPAREN fffz RPAREN EOF
+    | PSIZ (LBRACKET fffz (COMMA fffz)* RBRACKET)? LPAREN fffz RPAREN
     ;
     
 polynomial
@@ -20,7 +24,7 @@ exponent
 
 item   
     :   factor
-    |   OMEGA factor?
+    |   OMEGA MUL? factor?
     |   OMEGA POWER exponent (MUL? factor)?
     |   LPAREN OMEGA POWER exponent RPAREN (MUL? factor)?
     ;
@@ -39,6 +43,7 @@ EPSILON0
 
 OMEGA
     :   '\u03c9' 
+    |   'w'
     ;
  
 COMMA   
