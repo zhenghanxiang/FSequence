@@ -74,17 +74,21 @@ export default class FSeq {
 		if(!this.isLimit(b2)) {
 			return this.compareL(seq1, a2);
 		}
+
+        if(!this.isLimit(a1) && !this.isLimit(a2)) {
+			return this.compare(a1, a2);
+		}
 		
 		if(!this.isLimit(a1) || !this.isLimit(a2)) {
-			return this.compareL2(a1, a2);
+			return this.compareL(a1, a2);
 		}
 
         if(this.compareL(b1, b2) == 0) {
-			return this.compareL2(a1, a2);
+			return this.compareL(a1, a2);
 		}
 		
 		if((this.compareL(a1, b1)<0 || this.compareL(a2, b2)<0)) {
-			return this.compareL2(this.getRealPart(seq1), this.getRealPart(seq2));
+			return this.compareL(this.getRealPart(seq1), this.getRealPart(seq2));
 		}
 
 		if(this.compareL(a2, this.getSupSeq0(b2))>=0) {
@@ -95,7 +99,7 @@ export default class FSeq {
 			return this.compareL(a1, seq2);
 		}
 		
-		return this.compareL2(b1,b2);
+		return this.compareL(b1,b2);
     }
 
     static compareL2(seq1, seq2) {
