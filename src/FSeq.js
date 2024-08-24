@@ -16,7 +16,7 @@ export default class FSeq {
 
         // If a < b, expand to (a)
         if (!this.isEmpty(b) && this.compare(a, b) < 0) {
-            return this.getSupSeq0(a);
+            return this.expand(this.getSupSeq0(a));
         }
         /*
          * If [#,b,a] is compatible, expand to [#,b,a]([#,b,a](...[#,b,a](a)...))
