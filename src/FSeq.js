@@ -26,6 +26,9 @@ export default class FSeq {
          */
         if (this.compareL(a, b) < 0) {
             let result = a;
+            if(!this.isLimit(a)){
+                result = this.expand(a);
+            }
             for (let i = 0; i < this.N; i++) {
                 result = this.getSupSeq1(subSeqs, subSeqs.length, result);
             }
