@@ -25,19 +25,26 @@ export default class FSeq {
          *     If a != b, expand to [#,b](expand(a))
          */
         if (this.compareL(a, b) < 0) {
-            const newA = this.expand(a);
-            let result = this.getSupSeq1(subSeqs, subSeqs.length-1, newA);
-            for (let i = 0; i < this.N-1; i++) {
+            let result = a;
+            for (let i = 0; i < this.N; i++) {
                 result = this.getSupSeq1(subSeqs, subSeqs.length, result);
             }
             return result;
         } else {
-            let retainLength = subSeqs.length - 1;
             if (this.compare(a, b) === 0) {
-                retainLength = subSeqs.length - 2;
+                const c = subSeqs.length > 2 ? subSeqs[subSeqs.length-3] : null;
+                const newA = this.add(c,this.expand(this.minus(a, c)));
+                return this.getSupSeq1(subSeqs,subSeqs.length-2,newA);	
+            }else{
+                let newA;
+                if(!this.isLimit(b)) {
+                    const b_pre = this.expand(b);
+                    newA = this.add(b_pre,this.expand(this.minus(a, b_pre)));
+                }else {
+                    newA = this.add(b,this.expand(this.minus(a, b)));
+                }
+                return this.getSupSeq1(subSeqs, subSeqs.length - 1, newA);
             }
-            const newA = this.expand(a);
-            return this.getSupSeq1(subSeqs, retainLength, newA);
         }
     }
 
@@ -318,4 +325,110 @@ export default class FSeq {
 			return this.getSupSeq1(subSeq, subSeq.length - 1, successor);
 		}
 	}
+
+    static minus(seq1, seq2) {
+        if (this.compare(seq1, seq2) < 0) {
+            throw new Error("Runtime Exception");
+        }
+        if (this.compare(seq1, seq2) === 0) {
+            return [];
+        }
+        
+        let list1 = this.fseq2Items(seq1);
+        list1.sort((e1, e2) => this.compare(e2, e1));
+        let list2 = this.fseq2Items(seq2);
+        list2.sort((e1, e2) => this.compare(e2, e1));
+        
+        let startIndex = 0;
+        for (let i = 0; i < Math.min(list1.length, list2.length); i++) {
+            if (this.compare(list1[i], list2[i]) > 0) {
+                break;
+            } else {
+                startIndex = i + 1;
+            }
+        }
+        let preResult = list1.slice(startIndex);
+        return this.items2Fseq(preResult);
+    }
+    
+    static add(seq1, seq2) {
+        if (this.isEmpty(seq1) || this.isEmpty(seq2)) {
+            return this.isEmpty(seq1) ? seq2 : seq1;
+        }
+
+        let list1 = this.fseq2Items(seq1);
+        list1.sort((e1, e2) => this.compare(e2, e1));
+        let list2 = this.fseq2Items(seq2);
+        list2.sort((e1, e2) => this.compare(e2, e1));
+        let preResult = [];
+        for (let item of list1) {
+            if (this.compare(item, list2[0]) >= 0) {
+                preResult.push(item);
+            }
+        }
+        preResult.push(...list2);
+        return this.items2Fseq(preResult);
+    }
+
+    static fseq2Items(seq) {
+        let result = [];
+        if (this.isEmpty(seq)) {
+            return result;
+        }
+        if (this.isOne(seq)) {
+            result.push(seq);
+            return result;
+        }
+        
+        if (this.isTwo(seq)) {
+            let one = this.getOne();
+            result.push(one);
+            result.push(one);
+            return result;
+        }
+        
+        let subSeqs = this.getSubSeq(seq);
+        let a = subSeqs[subSeqs.length - 1];
+        let b = subSeqs.length > 1 ? subSeqs[subSeqs.length - 2] : null;
+        
+        if (this.isLimit(b)) {
+            result.push(seq);
+            return result;
+        } else {
+            let b_pre = this.expand(b);
+            let items = this.fseq2Items(this.minus(a, b_pre));
+            let item = this.getSupSeq1(subSeqs, subSeqs.length - 2, b_pre);
+            items.push(item);
+            return items;
+        }
+    }
+
+    static items2Fseq(preResult) {
+        preResult.sort((e1, e2) => this.compare(e1, e2));
+        let result = [];
+        for (let is of preResult) {
+            if (this.isEmpty(result)) {
+                result = is;
+                continue;
+            }
+            if (this.isOne(is)) {
+                result = this.getSuccessor(result);
+            } else {
+                let subSeqs = this.getSubSeq(is);
+                let a = subSeqs[subSeqs.length - 1];
+                let successor_a = this.getSuccessor(a);
+                let new_a = this.add(a, result);
+                result = this.getSupSeq1(subSeqs, subSeqs.length - 1, successor_a, new_a);
+            }
+        }
+        return result;
+    }
+
+    static isTwo(seq) {
+        return this.compare(seq, this.getTwo()) === 0;
+    }
+
+    static getTwo() {
+        return this.getSupSeq0(this.getOne(), this.getOne());
+    }
 }
