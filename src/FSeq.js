@@ -66,6 +66,14 @@ export default class FSeq {
             return 1;
         }
 
+		if(this.compare(seq1, seq2)>0 && this.compare(this.getAddCore(this.minus(seq1,seq2)),this.getAddCore(seq2))<0) {
+            return -1;
+		}
+		
+		if(this.compare(seq1, seq2)<0 && this.compare(this.getAddCore(seq1),this.getAddCore(this.minus(seq2,seq1)))>0) {
+            return 1;
+		}
+
         const subSeqs1 = this.getSubSeq(seq1);
         const subSeqs2 = this.getSubSeq(seq2);
 
@@ -98,7 +106,7 @@ export default class FSeq {
 		}
 		
 		if((this.compareL(a1, b1)<0 || this.compareL(a2, b2)<0)) {
-			return this.compareL(this.getRealPart(seq1), this.getRealPart(seq2));
+			return this.compareL(this.getRealCore(seq1), this.getRealCore(seq2));
 		}
 
 		if(this.compareL(a2, this.getSupSeq0(b2))>=0) {
@@ -219,7 +227,7 @@ export default class FSeq {
         return resultList;
     }
 
-    static getRealPart(seq){
+    static getRealCore(seq){
 		if(this.isOne(seq)) {
 			return seq;
 		}
@@ -229,7 +237,21 @@ export default class FSeq {
 		if(this.compareL(b, a) > 0 && this.isLimit(a)) {
 			return a;
 		}else {
-			return this.getRealPart(a);
+			return this.getRealCore(a);
+		}
+	}
+
+    static getAddCore(seq){
+		if(this.isOne(seq)) {
+			return seq;
+		}
+		const subSeqs = this.getSubSeq(seq);
+		const a = subSeqs[subSeqs.length-1];
+		const b = subSeqs.length>1?subSeqs[subSeqs.length-2]:null;
+		if(this.isLimit(b)) {
+			return seq;
+		}else {
+			return this.getAddCore(a);
 		}
 	}
     
