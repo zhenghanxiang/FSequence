@@ -66,32 +66,27 @@ export default class FSeq {
             return 1;
         }
 
-		if(this.compare(seq1, seq2)>0 && this.compare(this.getAddCore(this.minus(seq1,seq2)),this.getAddCore(seq2))<0) {
-            return -1;
-		}
-		
-		if(this.compare(seq1, seq2)<0 && this.compare(this.getAddCore(seq1),this.getAddCore(this.minus(seq2,seq1)))>0) {
-            return 1;
-		}
-
+        
         const subSeqs1 = this.getSubSeq(seq1);
         const subSeqs2 = this.getSubSeq(seq2);
-
+        
         //如果fffz表示为ψZ[#,b](a)，假设它的等级，完全由b和a决定;
-
+        
         const a1 = subSeqs1[subSeqs1.length - 1];
         const b1 = subSeqs1.length > 1 ? subSeqs1[subSeqs1.length - 2] : null;
-
+        
         const a2 = subSeqs2[subSeqs2.length - 1];
         const b2 = subSeqs2.length > 1 ? subSeqs2[subSeqs2.length - 2] : null;
 
-        if(!this.isLimit(b1)) {
-			return this.compareL(a1, seq2);
-		}
-		
-		if(!this.isLimit(b2)) {
-			return this.compareL(seq1, a2);
-		}
+        if(!this.isLimit(b1) || !this.isLimit(b2)) {
+            if(this.compare(seq1, seq2)>0 && this.compare(this.getAddCore(this.minus(seq1,seq2)),this.getAddCore(seq2))<0) {
+                return -1;
+            }
+            if(this.compare(seq1, seq2)<0 && this.compare(this.getAddCore(seq1),this.getAddCore(this.minus(seq2,seq1)))>0) {
+                return 1;
+            }
+            return this.compareL(this.getAddCore(seq1), this.getAddCore(seq2));
+        }
 
         if(!this.isLimit(a1) && !this.isLimit(a2)) {
 			return this.compare(a1, a2);

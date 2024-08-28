@@ -18,8 +18,13 @@ export default class FakeTest {
         }
         return FSeq.getSupSeq00(subSeqs);
     }
+	static test(ordinal1, ordinal2, assertResult) {
+		this.test1(ordinal1, ordinal2, assertResult);
+		this.test1(ordinal2, ordinal1, 0-assertResult);
+	}	
+
     
-    static test(ordinal1, ordinal2, assertResult) {
+    static test1(ordinal1, ordinal2, assertResult) {
         const seq1 = FakeTest.map.get(ordinal1);
         const seq2 = FakeTest.map.get(ordinal2);
         if (seq1 === undefined) {
@@ -232,6 +237,7 @@ export default class FakeTest {
 		this.test("ω^(ω+1)", "φ(ω,Γ0+1)", -1);
 		this.test("(ω^(ω+1))*2", "(ω^(ω+1))*3", 0);
 		this.test("ω^ω^ω", "ω^ω^ω2", 0);
+		this.test("ω^ω^ω2+ω^ω", "ω^ω^ω2*2", -1);//20240821修改
 		this.test("ε0", "ε0*2", 0);
 		this.test("ε0", "ε1", 0);
 		this.test("ε0", "ε(ω+1)", 0);
@@ -276,7 +282,11 @@ export default class FakeTest {
 		this.test("ω^(ω+1)+ω^ω", "(ω^(ω+1))*2", 1);
 		this.test("(ω^(ω+1))*2", "(ω^(ω+1))*2+ω^ω", 1);
 		this.test("(ω^(ω+1))*2+ω^ω", "(ω^(ω+1))*3", 1);
-		this.test("ω^ω^(ω+1)", "ω^ω", 1);//20240821修改
+		this.test("ω^ω^(ω+1)", "ω^ω^(ω+1)+ω^ω", 1);//20240821修改
+		this.test("ω^ω^(ω+1)+ω^ω", "ω^ω^(ω+1)*2", -1);//20240821修改
+		this.test("ω^ω^(ω+1)", "ω^(ω^(ω+1)+ω^ω)", 1);
+		this.test("ω^(ω^(ω+1)+ω^ω)", "ω^(ω^(ω+1)*2)", 1);
+		this.test("ω^ω^ω2", "ω^ω^ω2+ω^ω", 1);//20240821修改
 		this.test("ε0", "φ(ω,0)", 1);
 		this.test("ε0", "SVO", 1);
 		this.test("ε0", "SHO", 1);
@@ -345,6 +355,7 @@ export default class FakeTest {
 		FakeTest.map.set("ω^ω^2", this.getSupSeq("ω","ω^2"));
 		FakeTest.map.set("ω^(ω^2+1)", this.getSupSeq("ω","ω^2+1"));
 		FakeTest.map.set("ω^ω^ω", this.getSupSeq("ω","ω^ω"));
+		FakeTest.map.set("ω^ω^ω+1", this.getSupSeq("ω","ω^ω+1","ω^ω+1"));
 		FakeTest.map.set("ω^ω^ω+ω", this.getSupSeq("ω","ω^ω+1","ω^ω+ω"));
 		FakeTest.map.set("ω^ω^ω+ω^ω", this.getSupSeq("ω","ω^ω+1","(ω^ω)*2"));
 		FakeTest.map.set("ω^ω^ω+(ω^ω)*2", this.getSupSeq("ω","ω^ω+1","(ω^ω)*3"));
@@ -352,10 +363,16 @@ export default class FakeTest {
 		FakeTest.map.set("ω^(ω^ω+ω)", this.getSupSeq("ω","ω^ω+ω"));
 		FakeTest.map.set("ω^(ω^ω+ω2)", this.getSupSeq("ω","ω^ω+ω2"));
 		FakeTest.map.set("ω^(ω^ω+ω^2)", this.getSupSeq("ω","ω^ω+ω^2"));
-		FakeTest.map.set("ω^ω^(ω+1)", this.getSupSeq("ω","ω^(ω+1)"));		
+		FakeTest.map.set("ω^ω^(ω+1)", this.getSupSeq("ω","ω^(ω+1)"));	
+		FakeTest.map.set("ω^ω^(ω+1)+ω^ω", this.getSupSeq("ω","ω^(ω+1)+1","ω^(ω+1)+ω^ω"));	
+		FakeTest.map.set("ω^ω^(ω+1)*2", this.getSupSeq("ω","ω^(ω+1)+1","ω^ω^(ω+1)"));	
+		FakeTest.map.set("ω^(ω^(ω+1)+ω^ω)", this.getSupSeq("ω","ω^(ω+1)+ω^ω"));	
+		FakeTest.map.set("ω^(ω^(ω+1)*2)", this.getSupSeq("ω","(ω^(ω+1))*2"));	
 		FakeTest.map.set("ω^ω^(ω^2+1)", this.getSupSeq("ω","ω^(ω^2+1)"));		
 		FakeTest.map.set("ω^ω^(ω^ω+1)", this.getSupSeq("ω","ω^(ω^ω+1)"));		
 		FakeTest.map.set("ω^ω^ω2", this.getSupSeq("ω","ω^ω+1","ω^ω^ω"));
+		FakeTest.map.set("ω^ω^ω2+ω^ω", this.getSupSeq("ω","ω^ω+1","ω^ω^ω+1","ω^ω^ω+ω^ω"));
+		FakeTest.map.set("ω^ω^ω2*2", this.getSupSeq("ω","ω^ω+1","ω^ω^ω+1","ω^ω^ω2"));
 		FakeTest.map.set("ε0", this.getSupSeq("ω"));
 		FakeTest.map.set("ε0+1", this.getSupSeq("ω+1","ω+1"));
 		FakeTest.map.set("ε0+ω", this.getSupSeq("ω+1","ω2"));
