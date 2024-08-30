@@ -24,7 +24,7 @@ export default class FSeq {
          *     If a == b, expand to[#](expand(a))
          *     If a != b, expand to [#,b](expand(a))
          */
-        if (this.compareL(a, b) < 0) {
+        if (this.compareL(subSeqs) > 0) {
             let result = a;
             if(!this.isLimit(a)){
                 result = this.expand(a);
@@ -51,7 +51,96 @@ export default class FSeq {
         }
     }
 
-    static compareL(seq1, seq2) {
+    static compareL(subSeqs) {
+		if(subSeqs == null ||subSeqs.length == 0) {
+			return 1;
+		}
+		
+		const a = subSeqs[subSeqs.length-1];
+		const b = subSeqs.length > 1 ? subSeqs[subSeqs.length-2] : null;
+		if(this.compareL1(b, a)>0) {
+			return 1;
+		}
+		if(this.compareL2(b, a)>0) {
+			let key_subSeq = null;
+			for (let i = 2; i < subSeqs.length; i++) {
+				const subseq_2 = subSeqs.length > i ? subSeqs[subSeqs.length-i-1] : null;
+				const subseq_1 = subSeqs.length > i-1 ? subSeqs[subSeqs.length-i] : null;
+				if(this.compareL1(subseq_1,subseq_2)<0){
+					key_subSeq = subseq_1;
+					break;
+				}
+			}
+			if(this.compareL1(key_subSeq, a)>0) {
+				return 1;
+			}
+		}
+		return -1;
+	}
+
+    static compareL1(seq1, seq2) {
+        if (this.isEmpty(seq1) || this.isEmpty(seq2)) {
+            return !this.isEmpty(seq1) ? -1 : !this.isEmpty(seq2) ? 1 : 0;
+        }
+
+        if (!this.isLimit(seq1) && !this.isLimit(seq2)) {
+            return 0;
+        }
+        if (!this.isLimit(seq1) && this.isLimit(seq2)) {
+            return -1;
+        }
+        if (this.isLimit(seq1) && !this.isLimit(seq2)) {
+            return 1;
+        }
+
+        
+        const subSeqs1 = this.getSubSeq(seq1);
+        const subSeqs2 = this.getSubSeq(seq2);
+        
+        //如果fffz表示为ψZ[#,b](a)，假设它的等级，完全由b和a决定;
+        
+        const a1 = subSeqs1[subSeqs1.length - 1];
+        const b1 = subSeqs1.length > 1 ? subSeqs1[subSeqs1.length - 2] : null;
+        
+        const a2 = subSeqs2[subSeqs2.length - 1];
+        const b2 = subSeqs2.length > 1 ? subSeqs2[subSeqs2.length - 2] : null;
+
+		if(!this.isLimit(b1)) {
+			return this.compareL1(a1, seq2);
+		}
+		
+		if(!this.isLimit(b2)) {
+			return this.compareL1(seq1, a2);
+		}
+
+        if(!this.isLimit(a1) && !this.isLimit(a2)) {
+			return this.compare(a1, a2);
+		}
+		
+		if(!this.isLimit(a1) || !this.isLimit(a2)) {
+			return this.compareL1(a1, a2);
+		}
+
+        if(this.compareL1(b1, b2) == 0) {
+			return this.compareL1(a1, a2);
+		}
+		
+		if((this.compareL1(a1, b1)<0 || this.compareL1(a2, b2)<0)) {
+			return this.compareL1(this.getRealCore(seq1), this.getRealCore(seq2));
+		}
+
+		if(this.compareL1(a2, this.getSupSeq0(b2))>=0) {
+			return this.compareL1(seq1, a2);
+		}
+		
+		if(this.compareL1(a1, this.getSupSeq0(b1))>=0) {
+			return this.compareL1(a1, seq2);
+		}
+		
+		return this.compareL1(b1,b2);
+    }
+
+    static compareL2(seq1, seq2) {
         if (this.isEmpty(seq1) || this.isEmpty(seq2)) {
             return !this.isEmpty(seq1) ? -1 : !this.isEmpty(seq2) ? 1 : 0;
         }
@@ -85,7 +174,7 @@ export default class FSeq {
             if(this.compare(seq1, seq2)<0 && this.compare(this.getAddCore(seq1),this.getAddCore(this.minus(seq2,seq1)))>0) {
                 return 1;
             }
-            return this.compareL(this.getAddCore(seq1), this.getAddCore(seq2));
+            return this.compareL2(this.getAddCore(seq1), this.getAddCore(seq2));
         }
 
         if(!this.isLimit(a1) && !this.isLimit(a2)) {
@@ -93,40 +182,27 @@ export default class FSeq {
 		}
 		
 		if(!this.isLimit(a1) || !this.isLimit(a2)) {
-			return this.compareL(a1, a2);
+			return this.compareL2(a1, a2);
 		}
 
-        if(this.compareL(b1, b2) == 0) {
-			return this.compareL(a1, a2);
+        if(this.compareL2(b1, b2) == 0) {
+			return this.compareL2(a1, a2);
 		}
 		
-		if((this.compareL(a1, b1)<0 || this.compareL(a2, b2)<0)) {
-			return this.compareL(this.getRealCore(seq1), this.getRealCore(seq2));
+		if((this.compareL2(a1, b1)<0 || this.compareL2(a2, b2)<0)) {
+			return this.compareL2(this.getRealCore(seq1), this.getRealCore(seq2));
 		}
 
-		if(this.compareL(a2, this.getSupSeq0(b2))>=0) {
-			return this.compareL(seq1, a2);
+		if(this.compareL2(a2, this.getSupSeq0(b2))>=0) {
+			return this.compareL2(seq1, a2);
 		}
 		
-		if(this.compareL(a1, this.getSupSeq0(b1))>=0) {
-			return this.compareL(a1, seq2);
+		if(this.compareL2(a1, this.getSupSeq0(b1))>=0) {
+			return this.compareL2(a1, seq2);
 		}
 		
-		return this.compareL(b1,b2);
+		return this.compareL2(b1,b2);
     }
-
-    static compareL2(seq1, seq2) {
-		if(!this.isLimit(seq1)&&!this.isLimit(seq2)) {
-			/*
-            const successorPart1 = this.getSuccessorPartIntValue(seq1);
-			const successorPart2 = this.getSuccessorPartIntValue(seq2);
-			return successorPart1 - successorPart2;
-            */
-            return this.compare(seq1,seq2);
-		}else {
-			return this.compareL(seq1, seq2);
-		}
-	}
 
     static compare(seq1, seq2) {
         if (this.isEmpty(seq1) || this.isEmpty(seq2)) {
@@ -229,7 +305,7 @@ export default class FSeq {
 		const subSeqs = this.getSubSeq(seq);
 		const a = subSeqs[subSeqs.length-1];
 		const b = subSeqs.length>1?subSeqs[subSeqs.length-2]:null;
-		if(this.compareL(b, a) > 0 && this.isLimit(a)) {
+		if(this.compareL2(b, a) > 0 && this.isLimit(a)) {
 			return a;
 		}else {
 			return this.getRealCore(a);

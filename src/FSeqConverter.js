@@ -53,12 +53,15 @@ export default class FSeqConverter {
     static validateFake(seq) {
         let errors = [];
         const subSeqs = FSeq.getSubSeq(seq);
-
+        let temp_subSeqs = [];
+        let temp_subSeqStrs = [];
+        temp_subSeqs.push(subSeqs[0]);
+        temp_subSeqStrs.push(this.fSeq2FFFZ(subSeqs[0],0))
         for (let i = 1; i < subSeqs.length-1; i++) {
-            if(FSeq.compareL(subSeqs[i-1],subSeqs[i])<=0){
-                const b = this.fSeq2FFFZ(subSeqs[i-1],0);
-                const a = this.fSeq2FFFZ(subSeqs[i],0);
-                errors.push(`fake validate fail [${b},${a}] not exist !`);
+            temp_subSeqs.push(subSeqs[i]);
+            temp_subSeqStrs.push(this.fSeq2FFFZ(subSeqs[i],0))
+            if(FSeq.compareL(temp_subSeqs)<=0){
+                errors.push(`fake validate fail [${temp_subSeqStrs}] not exist !`);
             }
         }    
         return errors;

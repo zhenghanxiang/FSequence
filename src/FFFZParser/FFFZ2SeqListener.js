@@ -64,7 +64,9 @@ export default class FFFZ2SeqListener extends FFFZListener {
             const cnf_a = FSeqConverter.convertToCNF(a);
             const newCNF_a = CNFUtil.add0(cnf_a, cnfNode);
             const new_a = this.convertToFSeq1(newCNF_a);
-            if(FSeq.compareL(b, successor_a)>0) {
+            let new_subSeq = [...subSeq];
+            new_subSeq[new_subSeq.length-1] = successor_a;
+            if(FSeq.compareL(new_subSeq)>0) {
 				result = FSeq.getSupSeq1(subSeq, subSeq.length-1, successor_a, new_a);
 			}else {
 				result = FSeq.getSupSeq1(subSeq, subSeq.length-1, new_a);
@@ -97,7 +99,9 @@ export default class FFFZ2SeqListener extends FFFZListener {
 			const  a = subSeq[subSeq.length-1];
 			const  b = subSeq.length>1?subSeq[subSeq.length-2]:null;
 			const  successor_a = FSeq.getSuccessor(a);
-			const  fake = FSeq.compareL(b, successor_a) ;
+            let new_subSeq = [...subSeq];
+            new_subSeq[new_subSeq.length-1] = successor_a;
+			const  fake = FSeq.compareL(new_subSeq) ;
 			for (let i = 1; i < factor; i++) {
 				if(fake > 0) {
 					result = FSeq.getSupSeq1(subSeq, subSeq.length-1, successor_a, result);

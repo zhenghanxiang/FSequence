@@ -35,7 +35,7 @@ export default class FakeTest {
         }
 		let assertResultMsg = assertResult===1?"存在":"不存在";
         if (seq1 !== undefined && seq2 !== undefined) {
-            const compareL = FSeq.compareL(seq1, seq2);
+            const compareL = FSeq.compareL2(seq1, seq2);
 			let compareLMsg = compareL===1?"存在":"不存在";
 			if((compareL >0 && assertResult > 0) 
 				|| (compareL === 0 && assertResult === 0)
@@ -49,6 +49,35 @@ export default class FakeTest {
 			}
         }
     }
+
+	static test2(assertResult, ...ordinals) {
+		const seqs = new Array(ordinals.length);
+		let i = 0;
+		for (const ordinal of ordinals) {
+			const seq = FakeTest.map.get(ordinal);
+			if (seq === null) {
+				console.log(`${ordinal}不存在`);
+				return;
+			} else {
+				seqs[i] = seq;
+				i++;
+			}
+		}
+		const compareL = FSeq.compareL(seqs);
+		const compareLMsg = compareL > 0 ? "" : "不";
+		const assertMsg = assertResult > 0 ? "" : "不";
+	
+		const join = ordinals.join(",");
+		if ((compareL > 0 && assertResult > 0) 
+			|| (compareL === 0 && assertResult === 0)
+			|| (compareL < 0 && assertResult < 0)) {
+			console.log(`[${join}] ${compareLMsg}存在，符合预期结果 ${assertMsg}存在`);			
+		} else if ((compareL > 0 && assertResult <= 0) || (compareL <= 0 && assertResult > 0)) {
+			console.log(`[${join}]:${compareL}${compareLMsg}存在 不符合预期结果 ${assertResult}${assertMsg}存在`);
+		} else {
+			console.log(`[${join}]:${compareL}${compareLMsg}存在 不符合预期结果 ${assertResult}${assertMsg}存在`);
+		}
+	}
     
     static test0() {
 		console.log("====================================================================================");
@@ -297,6 +326,22 @@ export default class FakeTest {
 		this.test("ε(ω)", "ε(ω+1)", 1);
 		this.test("ε(ω+1)", "SHO", 1);
 		this.test("ζ0", "ε(ζ0+1)", 1);
+
+
+		this.test2(1, "ω^(ω+1)","ω^(ω+1)+ω^ω","ω^(ω+1)*2");
+		this.test2(-1, "ω^(ω+1)+ω^ω","ω^(ω+1)*2","ω^(ω+1)*2+ω^ω");
+		this.test2(-1, "ω^(ω+1)","ω^(ω+1)+ω^ω","ω^(ω+1)*2","ω^(ω+1)*2+ω^ω");
+
+
+
+
+
+
+
+
+
+
+
     }
     
     static {
@@ -342,8 +387,11 @@ export default class FakeTest {
 		FakeTest.map.set("ω^(ω+1)+ω", this.getSupSeq("ω","ω+2","ω2"));
 		FakeTest.map.set("ω^(ω+1)+ω^2", this.getSupSeq("ω","ω+2","ω^2"));
 		FakeTest.map.set("ω^(ω+1)+ω^ω", this.getSupSeq("ω","ω+2","ω^ω"));
+		FakeTest.map.set("ω^(ω+1)*2", this.getSupSeq("ω","ω+2","ω^(ω+1)"));
 		FakeTest.map.set("(ω^(ω+1))*2", this.getSupSeq("ω","ω+2","ω^(ω+1)"));
+		FakeTest.map.set("ω^(ω+1)*2+ω^ω", this.getSupSeq("ω","ω+2","ω^(ω+1)+ω^ω"));
 		FakeTest.map.set("(ω^(ω+1))*2+ω^ω", this.getSupSeq("ω","ω+2","ω^(ω+1)+ω^ω"));
+		FakeTest.map.set("ω^(ω+1)*3", this.getSupSeq("ω","ω+2","(ω^(ω+1))*2"));
 		FakeTest.map.set("(ω^(ω+1))*3", this.getSupSeq("ω","ω+2","(ω^(ω+1))*2"));
 		FakeTest.map.set("ω^(ω+2)", this.getSupSeq("ω","ω+2"));
 		FakeTest.map.set("ω^(ω+3)", this.getSupSeq("ω","ω+3"));
