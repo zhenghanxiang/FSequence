@@ -331,6 +331,7 @@ export default class FakeTest {
 		this.test2(1, "ω^(ω+1)","ω^(ω+1)+ω^ω","ω^(ω+1)*2");
 		this.test2(-1, "ω^(ω+1)+ω^ω","ω^(ω+1)*2","ω^(ω+1)*2+ω^ω");
 		this.test2(-1, "ω^(ω+1)","ω^(ω+1)+ω^ω","ω^(ω+1)*2","ω^(ω+1)*2+ω^ω");
+		this.test2(1, "ω^(ω2)","ω^(ω2)+ω^(ω+1)","ω^(ω2)+ω^(ω+1)+ω^ω");
 
 
 
@@ -396,6 +397,8 @@ export default class FakeTest {
 		FakeTest.map.set("ω^(ω+2)", this.getSupSeq("ω","ω+2"));
 		FakeTest.map.set("ω^(ω+3)", this.getSupSeq("ω","ω+3"));
 		FakeTest.map.set("ω^(ω2)", this.getSupSeq("ω","ω2"));
+		FakeTest.map.set("ω^(ω2)+ω^(ω+1)", this.getSupSeq("ω","ω2+1","ω^(ω+1)"));
+		FakeTest.map.set("ω^(ω2)+ω^(ω+1)+ω^ω", this.getSupSeq("ω","ω2+1","ω^(ω+1)+ω^ω"));
 		FakeTest.map.set("ω^(ω2+1)", this.getSupSeq("ω","ω2+1"));
 		FakeTest.map.set("ω^(ω2+2)", this.getSupSeq("ω","ω2+2"));
 		FakeTest.map.set("ω^(ω2+3)", this.getSupSeq("ω","ω2+3"));

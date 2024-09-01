@@ -62,20 +62,13 @@ export default class FSeq {
 			return 1;
 		}
 		if(this.compareL2(b, a)>0) {
-			let key_subSeq = null;
-			for (let i = 2; i < subSeqs.length; i++) {
-				const subseq_2 = subSeqs.length > i ? subSeqs[subSeqs.length-i-1] : null;
-				const subseq_1 = subSeqs.length > i-1 ? subSeqs[subSeqs.length-i] : null;
-				if(this.compareL1(subseq_1,subseq_2)<0){
-					key_subSeq = subseq_1;
-					break;
-				}
-			}
-			if(this.compareL1(key_subSeq, a)>0) {
+			let new_subSeqs = [...subSeqs];
+            new_subSeqs.splice(new_subSeqs.length-2,1)
+			if(this.compareL(new_subSeqs)>0) {
 				return 1;
 			}
 		}
-		return -1;
+		return this.compareL1(b, a);
 	}
 
     static compareL1(seq1, seq2) {
@@ -168,10 +161,10 @@ export default class FSeq {
         const b2 = subSeqs2.length > 1 ? subSeqs2[subSeqs2.length - 2] : null;
 
         if(!this.isLimit(b1) || !this.isLimit(b2)) {
-            if(this.compare(seq1, seq2)>0 && this.compare(this.getAddCore(this.minus(seq1,seq2)),this.getAddCore(seq2))<0) {
+            if(this.compare(seq1, seq2)>0 && this.compare(this.getAddCore(seq1),this.getAddCore(seq2))<0) {
                 return -1;
             }
-            if(this.compare(seq1, seq2)<0 && this.compare(this.getAddCore(seq1),this.getAddCore(this.minus(seq2,seq1)))>0) {
+            if(this.compare(seq1, seq2)<0 && this.compare(this.getAddCore(seq1),this.getAddCore(seq2))>0) {
                 return 1;
             }
             return this.compareL2(this.getAddCore(seq1), this.getAddCore(seq2));
