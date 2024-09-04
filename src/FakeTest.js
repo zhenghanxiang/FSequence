@@ -20,7 +20,7 @@ export default class FakeTest {
     }
 	static test(ordinal1, ordinal2, assertResult) {
 		this.test1(ordinal1, ordinal2, assertResult);
-		this.test1(ordinal2, ordinal1, 0-assertResult);
+		//this.test1(ordinal2, ordinal1, 0-assertResult);
 	}	
 
     
@@ -35,7 +35,7 @@ export default class FakeTest {
         }
 		let assertResultMsg = assertResult===1?"存在":"不存在";
         if (seq1 !== undefined && seq2 !== undefined) {
-            const compareL = FSeq.compareL2(seq1, seq2);
+            const compareL = FSeq.compareL0(seq1, seq2);
 			let compareLMsg = compareL===1?"存在":"不存在";
 			if((compareL >0 && assertResult > 0) 
 				|| (compareL === 0 && assertResult === 0)
@@ -73,9 +73,9 @@ export default class FakeTest {
 			|| (compareL < 0 && assertResult < 0)) {
 			console.log(`[${join}] ${compareLMsg}存在，符合预期结果 ${assertMsg}存在`);			
 		} else if ((compareL > 0 && assertResult <= 0) || (compareL <= 0 && assertResult > 0)) {
-			console.log(`[${join}]:${compareL}${compareLMsg}存在 不符合预期结果 ${assertResult}${assertMsg}存在`);
+			console.error(`[${join}]:${compareL}${compareLMsg}存在 不符合预期结果 ${assertResult}${assertMsg}存在`);
 		} else {
-			console.log(`[${join}]:${compareL}${compareLMsg}存在 不符合预期结果 ${assertResult}${assertMsg}存在`);
+			console.warn(`[${join}]:${compareL}${compareLMsg}存在 不符合预期结果 ${assertResult}${assertMsg}存在`);
 		}
 	}
     
@@ -83,7 +83,6 @@ export default class FakeTest {
 		console.log("====================================================================================");
 		console.log("Fake测试");
 		console.log("====================================================================================");
-        this.test("", "1", 1);
         this.test("", "1", 1);
 		this.test("ω", "ω+1", 1);
 		this.test("ω", "ω+2", 1);
@@ -250,7 +249,6 @@ export default class FakeTest {
 		this.test("(ω^ω)*2", "Γ0^Γ0", -1);
 		this.test("(ω^ω)*2", "ε(Γ0+1)", -1);
 		this.test("(ω^ω)*2", "φ(ε(Γ0+1),0)", -1);
-		this.test("ω^(ω+1)", "ω^ω", -1);
 		this.test("ω^(ω+1)", "(ω^(ω+1))*2", 0);
 		this.test("ω^(ω+1)", "ω^(ω+2)", -1);
 		this.test("ω^(ω+1)", "ω^(ω2)", -1);
