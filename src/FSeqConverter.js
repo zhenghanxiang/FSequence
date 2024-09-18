@@ -7,6 +7,8 @@ import FFFZErrorListener from "./FFFZParser/FFFZErrorListener.js"
 import CNFNode from "./FFFZParser/CNFNode.js"
 import CNFUtil from "./FFFZParser/CNFUtil.js"
 import FSeq from "./FSeq.js"
+import CompositeDecider from "./compatible/CompositeDecider.js"
+
 
 export default class FSeqConverter {
     
@@ -60,7 +62,7 @@ export default class FSeqConverter {
         for (let i = 1; i < subSeqs.length-1; i++) {
             temp_subSeqs.push(subSeqs[i]);
             temp_subSeqStrs.push(this.fSeq2FFFZ(subSeqs[i],0))
-            if(FSeq.compareL(temp_subSeqs)<=0){
+            if(CompositeDecider.compareL(temp_subSeqs)<=0){
                 errors.push(`fake validate fail [${temp_subSeqStrs}] not exist !`);
             }
         }    

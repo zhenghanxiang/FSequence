@@ -3,6 +3,7 @@ import FSeqConverter from "../FSeqConverter.js"
 import CNFNode from "./CNFNode.js"
 import CNFUtil from "./CNFUtil.js"
 import FSeq from "../FSeq.js"
+import CompositeDecider from "../compatible/CompositeDecider.js"
 
 
 export default class FFFZ2SeqListener extends FFFZListener {
@@ -66,7 +67,7 @@ export default class FFFZ2SeqListener extends FFFZListener {
             const new_a = this.convertToFSeq1(newCNF_a);
             let new_subSeq = [...subSeq];
             new_subSeq[new_subSeq.length-1] = successor_a;
-            if(FSeq.compareL(new_subSeq)>0) {
+            if(CompositeDecider.compareL(new_subSeq)>0) {
 				result = FSeq.getSupSeq1(subSeq, subSeq.length-1, successor_a, new_a);
 			}else {
 				result = FSeq.getSupSeq1(subSeq, subSeq.length-1, new_a);
@@ -101,7 +102,7 @@ export default class FFFZ2SeqListener extends FFFZListener {
 			const  successor_a = FSeq.getSuccessor(a);
             let new_subSeq = [...subSeq];
             new_subSeq[new_subSeq.length-1] = successor_a;
-			const  fake = FSeq.compareL(new_subSeq) ;
+			const  fake = CompositeDecider.compareL(new_subSeq) ;
 			for (let i = 1; i < factor; i++) {
 				if(fake > 0) {
 					result = FSeq.getSupSeq1(subSeq, subSeq.length-1, successor_a, result);

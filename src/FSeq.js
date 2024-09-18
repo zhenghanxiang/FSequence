@@ -1,3 +1,5 @@
+import CompositeDecider from "./compatible/CompositeDecider.js"
+
 export default class FSeq {
     
     static N = 3;
@@ -24,7 +26,7 @@ export default class FSeq {
          *     If a == b, expand to[#](expand(a))
          *     If a != b, expand to [#,b](expand(a))
          */
-        if (this.compareL(subSeqs) > 0) {
+        if (CompositeDecider.compareL(subSeqs) > 0) {
             let result = a;
             if(!this.isLimit(a)){
                 result = this.expand(a);
@@ -48,204 +50,6 @@ export default class FSeq {
                 }
                 return this.getSupSeq1(subSeqs, subSeqs.length - 1, newA);
             }
-        }
-    }
-
-    static compareL(subSeqs) {
-        if (subSeqs == null || subSeqs.length <= 1) {
-            return 1;
-        }
-        const a = subSeqs[subSeqs.length - 1];
-        const b = subSeqs.length > 1 ? subSeqs[subSeqs.length - 2] : null;
-
-        L1: for (let i = 1; i < this.M; i++) {
-            if (this.compareLN(b, a, i) > 0) {
-                for (let j = i + 1; j < this.M; j++) {
-                    if (this.compareLN(b, a, j) > 0) {
-                        continue L1;
-                    }
-                }
-                if (i === 1) {
-                    return 1;
-                }
-                let key_subseq = subSeqs[0];
-                for (let k = 2; k < subSeqs.length; k++) {
-                    if (this.compareLN(subSeqs[subSeqs.length - 1 - k], subSeqs[subSeqs.length - k], i) > 0) {
-                        key_subseq = subSeqs[subSeqs.length - k];
-                    }
-                }
-                if (this.compareLN(key_subseq, a, i) > 0) {
-                    return 1;
-                }
-            }
-        }
-        for (let i = 1; i < this.M; i++) {
-            if (this.compareLN(b, a, i) === 0) {
-                return 0;
-            }
-        }
-        return -1;
-    }
-
-    static compareL0(seq1, seq2) {
-        for (let i = 1; i < this.M; i++) {
-            if (this.compareLN(seq1, seq2, i) > 0) {
-                return 1;
-            }
-        }
-        for (let i = 1; i < this.M; i++) {
-            if (this.compareLN(seq1, seq2, i) === 0) {
-                return 0;
-            }
-        }
-        return -1;
-    }
-
-    static compareLN(seq1, seq2, n) {
-        switch (n) {
-            case 1:
-                return this.compareL1(seq1, seq2);
-            case 2:
-                return this.compareL3(seq1, seq2);
-            case 3:
-                return this.compareL5(seq1, seq2);
-            case 4:
-                return this.compareL6(seq1, seq2);
-            default:
-                return this.compareL6(seq1, seq2);
-        }
-    }
-
-    static compareL6(seq1, seq2) {
-		if (this.isEmpty(seq1) || this.isEmpty(seq2)) {
-            return !this.isEmpty(seq1) ? -1 : !this.isEmpty(seq2) ? 1 : 0;
-        }
-
-        if (!this.isLimit(seq1) && !this.isLimit(seq2)) {
-            return 0;
-        }
-        if (!this.isLimit(seq1) && this.isLimit(seq2)) {
-            return -1;
-        }
-        if (this.isLimit(seq1) && !this.isLimit(seq2)) {
-            return 1;
-        }
-        return this.compare(seq1, seq2);
-    }
-
-    static compareL5(seq1, seq2) {
-		if (this.isEmpty(seq1) || this.isEmpty(seq2)) {
-            return !this.isEmpty(seq1) ? -1 : !this.isEmpty(seq2) ? 1 : 0;
-        }
-
-        if (!this.isLimit(seq1) && !this.isLimit(seq2)) {
-            return 0;
-        }
-        if (!this.isLimit(seq1) && this.isLimit(seq2)) {
-            return -1;
-        }
-        if (this.isLimit(seq1) && !this.isLimit(seq2)) {
-            return 1;
-        }
-        return this.compare(this.getAddCore(seq1), this.getAddCore(seq2));
-    }
-
-    static compareL3(seq1, seq2) {
-		if (this.isEmpty(seq1) || this.isEmpty(seq2)) {
-            return !this.isEmpty(seq1) ? -1 : !this.isEmpty(seq2) ? 1 : 0;
-        }
-
-        if (!this.isLimit(seq1) && !this.isLimit(seq2)) {
-            return 0;
-        }
-        if (!this.isLimit(seq1) && this.isLimit(seq2)) {
-            return -1;
-        }
-        if (this.isLimit(seq1) && !this.isLimit(seq2)) {
-            return 1;
-        }
-        const subSeqs1 = this.getSubSeq(seq1);
-        const subSeqs2 = this.getSubSeq(seq2);
-        const a1 = subSeqs1[subSeqs1.length - 1];
-        const b1 = subSeqs1.length > 1 ? subSeqs1[subSeqs1.length - 2] : null;
-        const a2 = subSeqs2[subSeqs2.length - 1];
-        const b2 = subSeqs2.length > 1 ? subSeqs2[subSeqs2.length - 2] : null;
-
-        if (!this.isLimit(b1) || !this.isLimit(b2)) {
-            return this.compareL00(this.getAddCore(seq1), this.getAddCore(seq2));
-        }
-        if (!this.isLimit(a1) && !this.isLimit(a2)) {
-            return this.compare(a1, a2);
-        }
-        if (!this.isLimit(a1) || !this.isLimit(a2)) {
-            return this.compareL00(a1, a2);
-        }
-        const compareL_b1_a1 = this.compareL0(b1, a1);
-        const compareL_b2_a2 = this.compareL0(b2, a2);
-        if (compareL_b1_a1 <= 0 && this.compareL0(a1, this.getSupSeq0(b1)) >= 0) {
-            return this.compareL0(a1, seq2);
-        }
-        if (compareL_b2_a2 <= 0 && this.compareL0(a2, this.getSupSeq0(b2)) >= 0) {
-            return this.compareL0(seq1, a2);
-        }
-        if (compareL_b1_a1 > 0 && compareL_b2_a2 > 0) {
-            return this.compareL0(a1, a2);
-        }
-        if (compareL_b1_a1 > 0 && compareL_b2_a2 <= 0) {
-            return this.compareL0(a1, b2) >= 0 ? 1 : -1;
-        }
-        if (compareL_b1_a1 <= 0 && compareL_b2_a2 > 0) {
-            return this.compareL0(b1, a2) <= 0 ? -1 : 1;
-        }
-        if (compareL_b1_a1 <= 0 && compareL_b2_a2 <= 0) {
-            return this.compareL0(b1, b2) === 0 ? this.compareL0(a1, a2) : this.compareL0(b1, b2);
-        }
-        return 0;
-    }
-
-    static compareL1(seq1, seq2) {
-		if (this.isEmpty(seq1) || this.isEmpty(seq2)) {
-            return !this.isEmpty(seq1) ? -1 : !this.isEmpty(seq2) ? 1 : 0;
-        }
-
-        if (!this.isLimit(seq1) && !this.isLimit(seq2)) {
-            return 0;
-        }
-        if (!this.isLimit(seq1) && this.isLimit(seq2)) {
-            return -1;
-        }
-        if (this.isLimit(seq1) && !this.isLimit(seq2)) {
-            return 1;
-        }
-        const subSeqs1 = this.getSubSeq(seq1);
-        const subSeqs2 = this.getSubSeq(seq2);
-        const a1 = subSeqs1[subSeqs1.length - 1];
-        const b1 = subSeqs1.length > 1 ? subSeqs1[subSeqs1.length - 2] : null;
-        const a2 = subSeqs2[subSeqs2.length - 1];
-        const b2 = subSeqs2.length > 1 ? subSeqs2[subSeqs2.length - 2] : null;
-
-        if (!this.isLimit(b1) || !this.isLimit(b2)) {
-            return this.compareL00(this.getAddCore(seq1), this.getAddCore(seq2));
-        }
-        if (!this.isLimit(a1) && !this.isLimit(a2)) {
-            return this.compare(a1, a2);
-        }
-        if (!this.isLimit(a1) || !this.isLimit(a2)) {
-            return this.compareL0(a1, a2);
-        }
-        return this.compareL00(this.getRealCore(seq1), this.getRealCore(seq2));
-    }
-
-    static compareL00(seq1, seq2) {
-        if (this.isEmpty(seq1) || this.isEmpty(seq2)) {
-            return !this.isEmpty(seq1) ? -1 : !this.isEmpty(seq2) ? 1 : 0;
-        }
-        if (!this.isLimit(seq1) && !this.isLimit(seq2)) {
-            const successorPart1 = this.getSuccessorPartIntValue(seq1);
-            const successorPart2 = this.getSuccessorPartIntValue(seq2);
-            return successorPart1 - successorPart2;
-        } else {
-            return this.compareL0(seq1, seq2);
         }
     }
 
@@ -342,56 +146,7 @@ export default class FSeq {
         }
         return resultList;
     }
-
-    static getRealCore(seq){
-		if(this.isOne(seq)) {
-			return seq;
-		}
-		const subSeqs = this.getSubSeq(seq);
-		const a = subSeqs[subSeqs.length-1];
-		const b = subSeqs.length>1?subSeqs[subSeqs.length-2]:null;
-		if(this.compareL0(b, a) > 0) {
-			return a;
-		}else {
-			return this.getRealCore(a);
-		}
-	}
-
-    static getAddCore(seq){
-		if(this.isOne(seq)) {
-			return seq;
-		}
-		const subSeqs = this.getSubSeq(seq);
-		const a = subSeqs[subSeqs.length-1];
-		const b = subSeqs.length>1?subSeqs[subSeqs.length-2]:null;
-		if(this.isLimit(b)) {
-			return seq;
-		}else {
-			return this.getAddCore(a);
-		}
-	}
     
-    static getSuccessorPartIntValue(seq) {
-        let result = 0;
-        let tmpSeq = seq;
-        while (true) {
-            if (this.isLimit(tmpSeq)) {
-                return result;
-            }
-            tmpSeq = this.expand(tmpSeq);
-            result++;
-        }
-    }
-    
-    static getLimitPart(seq) {
-        let result = seq;
-        while (true) {
-            if (this.isLimit(result)) {
-                return result;
-            }
-            result = this.expand(result);
-        }
-    }
     
     static isEmpty(seq) {
         return seq == null || seq.length === 0;
@@ -447,8 +202,8 @@ export default class FSeq {
 			return this.getSupSeq0(seq, seq);
 		}
 		const subSeq = this.getSubSeq(seq);
-        const a = subSeqs[subSeqs.length-1];
-		const b = subSeqs.length>1?subSeqs[subSeqs.length-2]:null;
+        const a = subSeq[subSeq.length-1];
+		const b = subSeq.length>1?subSeq[subSeq.length-2]:null;
 		const successor = this.getSuccessor(a);
 		if (this.isLimit(b)) {
 			return this.getSupSeq1(subSeq, subSeq.length - 1, successor, successor);
